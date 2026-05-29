@@ -24,7 +24,7 @@ print(data.isna().sum())#to check for null values
 data = data.replace({'quality':{8:'good',7:'good',6:'average',5:'average',4:'bad',3:'bad'}})
 print(data.head())
 
-x = data.drop(columns = 'quality')
+x = data.drop(columns = ['quality', 'Id'])
 y = data['quality']
 scaler = MinMaxScaler(feature_range=(0,1))
 x_scaled = scaler.fit_transform(x)

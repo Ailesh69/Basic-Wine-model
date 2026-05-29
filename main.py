@@ -5,6 +5,8 @@ import joblib
 import numpy as np
 import logging
 import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
@@ -13,7 +15,7 @@ app = FastAPI()
 
 load_model = None
 load_scaler = None
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class wineModel(BaseModel):
     fixed_acidity: float
@@ -47,8 +49,12 @@ async def load_artifacts():
 
 @app.get('/')
 def read_root():
-    return {"message": "Welcome to the Wine Quality Prediction API"}
+    return FileResponse('static/index.html')
 
+
+@app.get("/predict")
+async def predict_page():
+    return FileResponse('static/predict.html')
 
 @app.post('/predict')
 def pred_quality(data: wineModel):

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Predict Wine Quality</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="card">
+    <h1>🍷 Predict Wine Quality</h1>
+
+    <form id="wine-form">
+      <div class="grid">
+        <label>Fixed acidity      <input type="number" step="any" name="fixed_acidity"        value="7.4"    required /></label>
+        <label>Volatile acidity   <input type="number" step="any" name="volatile_acidity"     value="0.70"   required /></label>
+        <label>Citric acid        <input type="number" step="any" name="citric_acid"          value="0.00"   required /></label>
+        <label>Residual sugar     <input type="number" step="any" name="residual_sugar"       value="1.9"    required /></label>
+        <label>Chlorides          <input type="number" step="any" name="chlorides"            value="0.076"  required /></label>
+        <label>Free sulfur dioxide <input type="number" step="any" name="free_sulfur_dioxide"  value="11"     required /></label>
+        <label>Total sulfur dioxide<input type="number" step="any" name="total_sulfur_dioxide" value="34"     required /></label>
+        <label>Density            <input type="number" step="any" name="density"              value="0.9978" required /></label>
+        <label>pH                 <input type="number" step="any" name="pH"                   value="3.51"   required /></label>
+        <label>Sulphates          <input type="number" step="any" name="sulphates"            value="0.56"   required /></label>
+        <label>Alcohol            <input type="number" step="any" name="alcohol"              value="9.4"    required /></label>
+      </div>
+
+      <button class="btn" type="submit">Predict</button>
+    </form>
+
+    <p id="result"></p>
+    <a class="link" href="/">&larr; Back</a>
+  </main>
+
+  <script>
+    const API_URL = "/predict";
+    const form = document.getElementById("wine-form");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      result.textContent = "Predicting...";
+      result.className = "";
+
+      const payload = {};
+      new FormData(form).forEach((value, key) => {
+        payload[key] = parseFloat(value);
+      });
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("Server error: " + res.status);
+        const data = await res.json();
+        result.textContent = "Predicted quality: " + data.predicted_quality;
+        result.className = "ok";
+      } catch (err) {
+        result.textContent = "Error: " + err.message;
+        result.className = "err";
+      }
+    });
+  </script>
+</body>
+</html>
