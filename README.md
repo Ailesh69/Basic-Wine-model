@@ -46,6 +46,8 @@ venv\Scripts\activate        # Windows
 # Install dependencies
 pip install -r requirements.txt
 ```
+or you can run 
+pip install -r requirements.txt
 
 Create a `.env` file in the project root:
 
