@@ -43,6 +43,8 @@ venv\Scripts\activate        # Windows
 # Install dependencies
 pip install fastapi uvicorn scikit-learn pandas numpy joblib python-dotenv seaborn matplotlib
 ```
+or you can run 
+pip install -r requirements.txt
 
 Create a `.env` file in the project root:
 
