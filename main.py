@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from dotenv import load_dotenv
 import joblib
 import numpy as np
@@ -29,6 +29,13 @@ class wineModel(BaseModel):
     pH: float
     sulphates: float
     alcohol: float
+
+    @field_validator("*")
+    @classmethod
+    def must_not_be_negative(cls, v, info):
+        if v < 0:
+            raise ValueError(f"{info.field_name} must not be a negative number")
+        return v
 
 
 @app.on_event("startup")

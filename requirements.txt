@@ -1,7 +1,16 @@
+# Runtime
 fastapi
+uvicorn
 python-dotenv
-uvicorn 
 joblib
 numpy
-pandas 
+pandas
 scikit-learn
+
+# Training / EDA
+seaborn
+matplotlib
+
+# Testing
+pytest
+httpx

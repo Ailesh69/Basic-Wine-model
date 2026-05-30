@@ -18,16 +18,19 @@ backend, and a simple HTML/CSS frontend.
 ## Project structure
 
 ```
-Wine_classification/
+Basic-Wine-model/
 ├── WineQT.csv          # Dataset
 ├── model.py            # Trains models, tunes the best one, saves artifacts
 ├── model.pkl           # Saved trained model
 ├── scaler.pkl          # Saved fitted scaler
 ├── main.py             # FastAPI backend (serves frontend + /predict API)
-├── Static/             # Frontend
-│   ├── Index.html      # Landing page
+├── test.py             # Pytest suite (home page, predict page, input validation)
+├── static/             # Frontend
+│   ├── index.html      # Landing page
 │   ├── predict.html    # Prediction form
 │   └── style.css       # Styles
+├── Dockerfile          # Container build
+├── requirements.txt    # Python dependencies
 ├── .env                # MODEL_PATH / SCALER_PATH (not committed)
 └── .gitignore
 ```
@@ -41,7 +44,7 @@ venv\Scripts\activate        # Windows
 # source venv/bin/activate   # macOS / Linux
 
 # Install dependencies
-pip install fastapi uvicorn scikit-learn pandas numpy joblib python-dotenv seaborn matplotlib
+pip install -r requirements.txt
 ```
 
 Create a `.env` file in the project root:
@@ -101,7 +104,20 @@ Then open <http://127.0.0.1:8000/> in your browser:
 { "predicted_quality": "average" }
 ```
 
+All 11 features must be non-negative numbers. A request containing a negative
+value is rejected with **HTTP 422** before reaching the model.
+
 Interactive API docs are available at <http://127.0.0.1:8000/docs>.
+
+## Testing
+
+The test suite ([`test.py`](test.py)) covers the landing page, the prediction
+page, and input validation (every feature is checked against several negative
+values to confirm they are rejected).
+
+```bash
+pytest -q
+```
 
 ## Notes
 
